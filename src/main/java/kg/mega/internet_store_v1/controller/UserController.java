@@ -40,6 +40,10 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @Operation(description = "Получить всех пользователей", summary = "Создать всех ползователя")
+    @ApiResponses( {
+            @ApiResponse(responseCode = "200", description = "Пользователи успешно созданы")
+    })
     @GetMapping("/getAll")
     public List<User> getAll() {
         return userService.findAll();
