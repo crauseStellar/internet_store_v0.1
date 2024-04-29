@@ -35,6 +35,10 @@ public class UserController {
         userService.saveUser(user);
     }
 
+    @Operation(description = "Получение пользователя по ID", summary = "Получить пользователя")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Пользователь успешно получен!")
+    })
     @GetMapping("/getById")
     public UserDto getById(@RequestParam Long id) {
         return userService.findById(id);
