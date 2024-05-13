@@ -1,12 +1,17 @@
 package kg.mega.internet_store_v1.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import kg.mega.internet_store_v1.models.Category;
 import kg.mega.internet_store_v1.models.Good;
 import kg.mega.internet_store_v1.models.dto.GoodDto;
+import kg.mega.internet_store_v1.service.FileStorageService;
 import kg.mega.internet_store_v1.service.GoodService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,13 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoodController {
     private final GoodService goodService;
+    private final FileStorageService storageService;
     @PostMapping("/save")
     public void saveGood(@RequestBody Good good){
          goodService.saveGood(good);
     }
     @GetMapping("/findById/{id}")
-    public Good findById(@PathVariable Long id){
-        return goodService.findById(id);
+    public GoodDto findById(@PathVariable Long id){
+        return goodService.getById(id);
     }
     @GetMapping("/findAll")
     public List<Good> findAll(){
@@ -46,5 +52,13 @@ public class GoodController {
     @PutMapping("/update")
     public Good updateGood(@RequestBody Good good){
        return goodService.updateGood(good);
+    }
+    @Operation(description = "Добавление картинки товара")
+    @ApiResponses( {
+            @ApiResponse(responseCode = "200", description = "Картинка успешно добавлена")
+    })
+    @PostMapping("/add_image")
+    public void addImage(@RequestParam("file")  MultipartFile file,@RequestParam Long id){
+        storageService.addImageToGood(file,id);
     }
 }

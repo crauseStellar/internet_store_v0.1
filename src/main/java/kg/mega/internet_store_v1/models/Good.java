@@ -3,6 +3,8 @@ package kg.mega.internet_store_v1.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "tb_good")
@@ -19,6 +21,10 @@ public class Good {
     private Long quantity;
     @ManyToOne
     private Category category;
+    @OneToMany(targetEntity = GoodImage.class)
+    @JoinColumn(name = "good_id", referencedColumnName = "id")
+    private List<GoodImage> goodImages;
+
 
 
     @Override
