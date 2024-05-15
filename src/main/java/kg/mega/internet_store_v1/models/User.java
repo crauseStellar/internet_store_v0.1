@@ -1,9 +1,9 @@
 package kg.mega.internet_store_v1.models;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -19,5 +19,6 @@ public class User {
     private String fio;
     private String email;
     private boolean isActive;
+
 
 }

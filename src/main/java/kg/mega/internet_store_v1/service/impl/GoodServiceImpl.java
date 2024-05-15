@@ -3,7 +3,7 @@ package kg.mega.internet_store_v1.service.impl;
 import kg.mega.internet_store_v1.mapper.GoodMapper;
 import kg.mega.internet_store_v1.models.Category;
 import kg.mega.internet_store_v1.models.Good;
-import kg.mega.internet_store_v1.models.GoodImage;
+import kg.mega.internet_store_v1.models.Image;
 import kg.mega.internet_store_v1.models.dto.GoodDto;
 import kg.mega.internet_store_v1.repository.GoodRepo;
 import kg.mega.internet_store_v1.service.GoodService;
@@ -14,9 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +37,7 @@ public class GoodServiceImpl implements GoodService {
         Good good = goodRepo.findById(id).get();
         GoodDto goodDto = goodMapper.toDto(good);
         goodDto.setCategoryName(good.getCategory().getName());
-        goodDto.setImages(good.getGoodImages().stream().map(GoodImage::getPath).toList());
+        goodDto.setImages(good.getImages().stream().map(Image::getPath).toList());
         return goodDto;
     }
 

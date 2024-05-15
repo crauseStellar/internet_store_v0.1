@@ -1,7 +1,7 @@
 package kg.mega.internet_store_v1.service;
 
 import kg.mega.internet_store_v1.models.Good;
-import kg.mega.internet_store_v1.models.GoodImage;
+import kg.mega.internet_store_v1.models.Image;
 import kg.mega.internet_store_v1.repository.GoodImageRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             outputStream.write(image.getBytes());
             outputStream.close();
             Good good = goodService.findById(goodId);
-            GoodImage goodImage = new GoodImage();
+            Image goodImage = new Image();
             goodImage.setGood(good);
             goodImage.setPath(newFile.getAbsolutePath());
             repo.save(goodImage);

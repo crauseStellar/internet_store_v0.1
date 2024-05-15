@@ -21,9 +21,9 @@ public class Good {
     private Long quantity;
     @ManyToOne
     private Category category;
-    @OneToMany(targetEntity = GoodImage.class)
+    @OneToMany(targetEntity = Image.class)
     @JoinColumn(name = "good_id", referencedColumnName = "id")
-    private List<GoodImage> goodImages;
+    private List<Image> images;
 
 
 
