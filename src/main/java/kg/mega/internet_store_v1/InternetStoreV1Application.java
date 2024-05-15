@@ -8,7 +8,7 @@ public class InternetStoreV1Application {
 
     public static void main(String[] args) {
         SpringApplication.run(InternetStoreV1Application.class, args);
-
+//stage branch created
     }
 
 }
