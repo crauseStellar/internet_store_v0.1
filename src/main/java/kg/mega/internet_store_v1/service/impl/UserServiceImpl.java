@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(user);
     }
 
+    @Override
+    public User getById(Long userId) {
+        return userRepo.findById(userId).get();
+    }
+
     private void test(ResponseDto responseDto){
         responseDto.getUser().setUsername("sdafsdf");
         responseDto.getGood().get(0);

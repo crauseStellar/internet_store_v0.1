@@ -1,5 +1,6 @@
 package kg.mega.internet_store_v1.mapper;
 
+import kg.mega.internet_store_v1.models.Image;
 import kg.mega.internet_store_v1.models.User;
 import kg.mega.internet_store_v1.models.dto.UserDto;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ public class UserMapper implements BaseMapper<User, UserDto> {
         userDto.setPassword(user.getPassword());
         userDto.setEmail(user.getEmail());
         userDto.setFio(user.getFio());
+        userDto.setAvatars(user.getImages().stream().map(Image::getPath).toList());
         return userDto;
     }
 

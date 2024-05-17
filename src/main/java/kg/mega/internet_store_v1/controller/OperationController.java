@@ -18,6 +18,4 @@ public class OperationController {
     public ResponseDto getUserCartData(@RequestParam Long userId,@RequestParam boolean isBought) {
         return operationService.getUserBasketData(userId, isBought);
     }
-
-
 }
