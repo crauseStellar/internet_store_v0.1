@@ -4,4 +4,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileStorageService {
     void addImageToGood(MultipartFile image,Long goodId);
+    void addUserAvatar(MultipartFile avatar,Long userId);
 }

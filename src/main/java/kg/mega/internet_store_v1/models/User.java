@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,6 +21,10 @@ public class User {
     private String fio;
     private String email;
     private boolean isActive;
+    @OneToMany(targetEntity = Image.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<Image> images;
+
 
 
 }
