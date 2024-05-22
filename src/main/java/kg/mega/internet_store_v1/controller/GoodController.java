@@ -8,7 +8,6 @@ import kg.mega.internet_store_v1.models.Good;
 import kg.mega.internet_store_v1.models.dto.GoodDto;
 import kg.mega.internet_store_v1.service.FileStorageService;
 import kg.mega.internet_store_v1.service.GoodService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
