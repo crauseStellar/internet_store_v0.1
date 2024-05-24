@@ -18,8 +18,9 @@ public class BasketGoodsServiceImpl implements BasketGoodsService {
         basketGoodsRepo.save(basketGoods);
     }
 
+
     @Override
-    public List<BasketGoods> getAllByBasketAndIsBought(Basket basket, boolean isBought) {
+    public List<BasketGoods> getAllByBasketAndPayed(Basket basket, boolean isBought) {
         return basketGoodsRepo.findAllByBasketAndPayed(basket,isBought);
     }
 

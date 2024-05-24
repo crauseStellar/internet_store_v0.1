@@ -16,7 +16,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping("/save")
+    @PostMapping("/admin/save")
     public void saveCategory(@RequestBody Category category) {
         categoryService.save(category);
     }

@@ -1,6 +1,7 @@
 package kg.mega.internet_store_v1.models;
 
 import jakarta.persistence.*;
+import kg.mega.internet_store_v1.enums.OperationType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -18,5 +19,6 @@ public class Operation {
     private LocalDateTime createdDate;
     @ManyToOne
     private User user;
-
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
 }
