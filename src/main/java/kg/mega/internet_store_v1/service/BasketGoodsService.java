@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface BasketGoodsService {
     void saveBasketGoods(BasketGoods basketGoods);
-    List<BasketGoods>getAllByBasketAndIsBought(Basket basket, boolean isBought);
+    List<BasketGoods>getAllByBasketAndPayed(Basket basket, boolean isBought);
 
 }

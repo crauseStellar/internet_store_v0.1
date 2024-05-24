@@ -20,7 +20,7 @@ import java.util.List;
 public class GoodController {
     private final GoodService goodService;
     private final FileStorageService storageService;
-    @PostMapping("/save")
+    @PostMapping("/admin/save")
     public void saveGood(@RequestBody Good good){
          goodService.saveGood(good);
     }
@@ -48,7 +48,7 @@ public class GoodController {
     public List<Good> getAllByCategory(@RequestBody Category category){
         return goodService.getAllByCategory(category);
     }
-    @PutMapping("/update")
+    @PutMapping("/admin/update")
     public Good updateGood(@RequestBody Good good){
        return goodService.updateGood(good);
     }
@@ -56,7 +56,7 @@ public class GoodController {
     @ApiResponses( {
             @ApiResponse(responseCode = "200", description = "Картинка успешно добавлена")
     })
-    @PostMapping("/add_image")
+    @PostMapping("/admin/add_image")
     public void addImage(@RequestParam("file")  MultipartFile file,@RequestParam Long id){
         storageService.addImageToGood(file,id);
     }
