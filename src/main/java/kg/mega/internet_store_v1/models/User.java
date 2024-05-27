@@ -25,6 +25,4 @@ public class User {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Image> images;
 
-
-
 }
