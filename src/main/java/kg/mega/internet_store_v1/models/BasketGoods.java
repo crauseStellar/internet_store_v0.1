@@ -18,7 +18,7 @@ public class BasketGoods {
     private Basket basket;
     @ManyToOne
     private Good good;
-    private boolean payed;
+    private Boolean payed;
 
     public BasketGoods(Basket basket, Good good) {
         this.basket=basket;

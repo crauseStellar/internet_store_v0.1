@@ -24,5 +24,5 @@ public class Image {
     @JsonIgnore
     private User user;
     private ImageType type;
-    private boolean isActive;
+    private Boolean isActive;
 }

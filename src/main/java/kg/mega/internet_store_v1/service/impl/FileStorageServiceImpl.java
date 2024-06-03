@@ -35,7 +35,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             Image goodImage = new Image();
             goodImage.setGood(good);
             goodImage.setPath(newFile.getAbsolutePath());
-            goodImage.setActive(true);
+//            goodImage.setActive(true);
             repo.save(goodImage);
         } catch (IOException e) {
             System.out.println("Error creating file");;
@@ -56,7 +56,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             userAvatar.setUser(user);
             userAvatar.setPath(newFile.getAbsolutePath());
             setFalseUserAvatarActivity(user);
-            userAvatar.setActive(true);
+//            userAvatar.setActive(true);
             repo.save(userAvatar);
         } catch (IOException e) {
             System.out.println("Error creating file");
@@ -65,7 +65,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     private void setFalseUserAvatarActivity(User user){
         Optional<Image> avatar = repo.findByUser(user);
         if(avatar.isPresent()){
-            avatar.get().setActive(false);
+//            avatar.get().setActive(false);
             repo.save(avatar.get());
         }else {
             System.out.println("User has no avatar yet");
