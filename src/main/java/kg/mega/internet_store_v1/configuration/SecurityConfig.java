@@ -12,6 +12,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +28,10 @@ public class SecurityConfig {
                 .password("{bcrypt}$2a$10$oOsWW8Rhxp3aTQ6gWsWxXepORVenA2XR/GIyCjLzlXClxDHLfbPbC")
                 .roles("USER", "ADMIN")
                 .build();
-        UserDetails manager = User.withUsername("manager").password(passwordEncoder().encode("MyPassword")).roles("ADMIN").build();
+        UserDetails manager = User.withUsername("manager")
+                .password(passwordEncoder().encode("MyPassword"))
+                .roles("ADMIN")
+                .build();
 
         return new InMemoryUserDetailsManager(user, admin,manager);
     }
@@ -36,8 +40,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("api/v1/good/**", "api/v1/category/**").hasRole("ADMIN")
+                        .requestMatchers("api/v1/good/admin/**").hasRole("ADMIN")
+                        .requestMatchers("api/v1/category/admin/**").hasRole("ADMIN")
                         .requestMatchers("api/v1/user/**").hasRole("USER")
+                        .requestMatchers("api/v1/good/findAll").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

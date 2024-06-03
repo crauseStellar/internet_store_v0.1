@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    void saveUser(User user);
+    User saveUser(User user);
     UserDto findById(Long id);
     List<User> findAll();
 
@@ -18,4 +18,6 @@ public interface UserService {
     User update(User user);
 
     User getById(Long userId);
+
+    Optional<User>findByUsername(String username);
 }

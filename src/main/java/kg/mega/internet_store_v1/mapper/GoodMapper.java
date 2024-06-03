@@ -1,11 +1,13 @@
 package kg.mega.internet_store_v1.mapper;
 
 import kg.mega.internet_store_v1.models.Good;
+import kg.mega.internet_store_v1.models.Image;
 import kg.mega.internet_store_v1.models.dto.GoodDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class GoodMapper implements BaseMapper<Good, GoodDto> {
     @Override
@@ -15,6 +17,8 @@ public class GoodMapper implements BaseMapper<Good, GoodDto> {
         dto.setPrice(good.getPrice());
         dto.setQuantity(good.getQuantity());
         dto.setRating(good.getRating());
+        dto.setImages(good.getImages().stream().map(Image::getPath).toList());
+        dto.setCategoryName(good.getCategory().getName());
         return dto;
     }
 
