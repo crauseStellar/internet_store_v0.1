@@ -3,18 +3,17 @@ package kg.mega.internet_store_v1.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import kg.mega.internet_store_v1.models.User;
 import kg.mega.internet_store_v1.models.dto.AuthResponseDto;
-import kg.mega.internet_store_v1.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -25,11 +24,11 @@ public class JwtUtil {
     @Value("${jwt.token-lifetime}")
     private Duration tokenLifetime;
 
-    public String generateToken(User user) {
+    public String generateToken(UserDetails user) {
         Date issusedDate = new Date();
         Date expirationDate = new Date(issusedDate.getTime()+tokenLifetime.toMillis());
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", user.getEmail());
+        claims.put("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
         claims.put("username", user.getUsername());
         return Jwts.builder()
                 .claims(claims)
@@ -55,4 +54,7 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-}
+    public  List<String> getRoles(String token) {
+        return getClaimsFromToken(token).get("roles", List.class);
+    }
+   }

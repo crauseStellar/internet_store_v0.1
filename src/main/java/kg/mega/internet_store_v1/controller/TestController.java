@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/test")
 public class TestController {
     private final JwtUtil  jwtUtil;
-    @PostMapping("/getToken")
-    public String getToken(@RequestBody User user){
-        return jwtUtil.generateToken(user);
-    }
+//    @PostMapping("/getToken")
+//    public String getToken(@RequestBody User user){
+//        return jwtUtil.generateToken(user);
+//    }
 
     @GetMapping("/parseToken")
     public AuthResponseDto parseToken(@RequestParam String token){

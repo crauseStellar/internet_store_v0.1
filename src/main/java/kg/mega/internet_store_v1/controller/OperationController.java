@@ -19,4 +19,8 @@ public class OperationController {
     public ResponseDto getUserCartData(@RequestParam Long userId,@RequestParam boolean isBought) {
         return operationService.getUserBasketData(userId, isBought);
     }
+    @PostMapping("/buy")
+    public void buy(@RequestParam Long userId,@RequestParam Long goodId) {
+        operationService.buy(userId, goodId);
+    }
 }

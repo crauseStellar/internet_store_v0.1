@@ -10,6 +10,7 @@ import kg.mega.internet_store_v1.service.AuthService;
 import kg.mega.internet_store_v1.service.UserService;
 import kg.mega.internet_store_v1.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,18 +19,23 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final BasketRepo basketRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AuthResponseDto authenticate(AuthRequestDto authRequestDto) {
-        User user=null;
+
         try {
-             user = userService.findByUsername(authRequestDto.getUsername())
+          userService.findByUsername(authRequestDto.getUsername())
                     .orElseThrow(()->new UserNotFoundException(String.format("Ползователя с логином '%s' несуществует!",authRequestDto.getUsername())));
         } catch (UserNotFoundException e) {
             System.out.println(e.getMessage());
             return null;
         }
-        return jwtUtil.getTokenAndData(jwtUtil.generateToken(user));
+        if (passwordEncoder.matches(authRequestDto.getPassword(),userService.findByUsername(authRequestDto.getUsername()).get().getPassword())){
+            return jwtUtil.getTokenAndData(jwtUtil.generateToken(userService.loadUserByUsername(authRequestDto.getUsername())));
+        }
+        System.out.println("Invalid password");
+        return new AuthResponseDto();
     }
 
     @Override
