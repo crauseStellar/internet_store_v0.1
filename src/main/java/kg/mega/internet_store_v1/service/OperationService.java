@@ -8,4 +8,5 @@ public interface OperationService {
     Operation createOperation(Operation operation);
     void addToUserBasket(RequestDto requestDto);
     ResponseDto getUserBasketData(Long userId, boolean isBought);
+    void buy(Long userId, Long productId);
 }

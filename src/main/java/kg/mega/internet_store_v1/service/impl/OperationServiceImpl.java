@@ -7,6 +7,7 @@ import kg.mega.internet_store_v1.models.*;
 import kg.mega.internet_store_v1.models.dto.GoodDto;
 import kg.mega.internet_store_v1.models.dto.RequestDto;
 import kg.mega.internet_store_v1.models.dto.ResponseDto;
+import kg.mega.internet_store_v1.repository.BasketGoodsRepo;
 import kg.mega.internet_store_v1.repository.OperationRepo;
 import kg.mega.internet_store_v1.service.*;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,8 @@ public class OperationServiceImpl implements OperationService {
     private final BasketGoodsService basketGoodsService;
     private final UserMapper userMapper;
     private final GoodMapper goodMapper;
+    private final BasketGoodsRepo basketGoodsRepo;
+
     @Override
     public Operation createOperation(Operation operation) {
 
@@ -48,11 +52,26 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public ResponseDto getUserBasketData(Long userId, boolean isBought) {
-
         User user = userService.getById(userId);
         Basket basket = basketService.findByUser(user);
         List<BasketGoods> basketGoodsList = basketGoodsService.getAllByBasketAndPayed(basket,isBought);
-
         return new ResponseDto(userMapper.toDto(user),goodMapper.toDtoList(basketGoodsList.stream().map(BasketGoods::getGood).toList()),isBought);
     }
+
+    @Override
+    public void buy(Long userId, Long productId) {
+        User user = userService.getById(userId);
+        Basket basket = basketService.findByUser(user);
+        List<BasketGoods> basketGoodsList = basketGoodsService.getAllByBasketAndPayed(basket,false);
+        for (BasketGoods basketGoods : basketGoodsList) {
+            if (Objects.equals(basketGoods.getGood().getId(), productId)) {
+                basketGoods.setPayed(true);
+                basketGoodsRepo.save(basketGoods);
+            }
+
+        }
+
+    }
+
+
 }
