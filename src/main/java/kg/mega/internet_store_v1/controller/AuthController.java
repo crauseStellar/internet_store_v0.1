@@ -5,6 +5,7 @@ import kg.mega.internet_store_v1.models.dto.AuthResponseDto;
 import kg.mega.internet_store_v1.models.dto.RegistrationRequestDto;
 import kg.mega.internet_store_v1.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
     @PostMapping("/authenticate")
-    private AuthResponseDto authenticate(@RequestBody AuthRequestDto authRequestDto) {
+    private ResponseEntity<?> authenticate(@RequestBody AuthRequestDto authRequestDto) {
         return authService.authenticate(authRequestDto);
     }
 
     @PostMapping("/registration")
-    public AuthResponseDto register(@RequestBody RegistrationRequestDto requestDto) {
+    public ResponseEntity<?> register(@RequestBody RegistrationRequestDto requestDto) {
         return authService.registrateNewUser(requestDto);
     }
 }
