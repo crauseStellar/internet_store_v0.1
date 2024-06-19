@@ -2,14 +2,17 @@ package kg.mega.internet_store_v1.service.impl;
 
 import kg.mega.internet_store_v1.mapper.UserMapper;
 import kg.mega.internet_store_v1.models.Basket;
-import kg.mega.internet_store_v1.models.dto.ResponseDto;
 import kg.mega.internet_store_v1.models.User;
+import kg.mega.internet_store_v1.models.dto.ResponseDto;
 import kg.mega.internet_store_v1.models.dto.UserDto;
 import kg.mega.internet_store_v1.repository.UserRepo;
 import kg.mega.internet_store_v1.service.BasketService;
 import kg.mega.internet_store_v1.service.RoleService;
 import kg.mega.internet_store_v1.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +26,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final BasketService basketService;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User saveUser(User user) {
@@ -85,4 +88,21 @@ public class UserServiceImpl implements UserService {
         responseDto.getGood().get(0);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> container = userRepo.findByUsername(username);
+        if (container.isEmpty()) {
+            throw new UsernameNotFoundException(username);
+        }
+        User user = container.get();
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList()
+        );
+    }
+//    private PasswordEncoder passwordEncoder() {
+//        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        return encoder;
+//    }
 }

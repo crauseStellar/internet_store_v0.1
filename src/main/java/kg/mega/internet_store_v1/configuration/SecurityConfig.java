@@ -1,62 +1,62 @@
 package kg.mega.internet_store_v1.configuration;
 
+import kg.mega.internet_store_v1.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
-@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user")
-                .password("{bcrypt}$2a$10$u0KWZS8ZEyV97oA37GDf8eosETTvXeyCNajerIuCXbMpN1IWKJz8m")
-                .roles("USER")
-                .build();
+    private final UserService userService;
+    private final TokenFilter tokenFilter;
+    private final PasswordEncoder passwordEncoder;
 
-        UserDetails admin = User.withUsername("admin")
-                .password("{bcrypt}$2a$10$oOsWW8Rhxp3aTQ6gWsWxXepORVenA2XR/GIyCjLzlXClxDHLfbPbC")
-                .roles("USER", "ADMIN")
-                .build();
-        UserDetails manager = User.withUsername("manager")
-                .password(passwordEncoder().encode("MyPassword"))
-                .roles("ADMIN")
-                .build();
 
-        return new InMemoryUserDetailsManager(user, admin,manager);
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("api/v1/good/admin/**").hasRole("ADMIN")
-                        .requestMatchers("api/v1/category/admin/**").hasRole("ADMIN")
-                        .requestMatchers("api/v1/user/**").hasRole("USER")
-                        .requestMatchers("api/v1/good/findAll").hasRole("USER")
-                        .anyRequest().permitAll()
-                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("api/v1/good/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("api/v1/category/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("api/v1/user/**").hasAuthority("USER")
+                        .requestMatchers("api/v1/good/findAll").hasAuthority("USER")
+                        .anyRequest().permitAll()
+                )
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        return encoder;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        daoAuthenticationProvider.setUserDetailsService(userService);
+        return daoAuthenticationProvider;
+    }
+
 
 }
