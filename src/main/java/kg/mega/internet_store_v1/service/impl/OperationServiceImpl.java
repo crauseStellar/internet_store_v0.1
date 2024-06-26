@@ -4,7 +4,6 @@ import kg.mega.internet_store_v1.enums.OperationType;
 import kg.mega.internet_store_v1.mapper.GoodMapper;
 import kg.mega.internet_store_v1.mapper.UserMapper;
 import kg.mega.internet_store_v1.models.*;
-import kg.mega.internet_store_v1.models.dto.GoodDto;
 import kg.mega.internet_store_v1.models.dto.RequestDto;
 import kg.mega.internet_store_v1.models.dto.ResponseDto;
 import kg.mega.internet_store_v1.repository.BasketGoodsRepo;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,10 +66,6 @@ public class OperationServiceImpl implements OperationService {
                 basketGoods.setPayed(true);
                 basketGoodsRepo.save(basketGoods);
             }
-
         }
-
     }
-
-
 }

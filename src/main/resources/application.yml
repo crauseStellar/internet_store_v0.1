@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/store_db
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: foreverythingelsepost@gmail.com
+    password: nvbu tmce apfr uqog
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  secret-key: springsecurityuserpasswordadmin123sdfserfdwfwe
+  token-lifetime: 10m
+
+logging:
+  file:
+    name: internet_store_app.log
+  level:
+    root: info
+  logback:
+    rollingpolicy:
+      file-name-pattern: internet_store_app-%d{-dd-MM-yyyy}-%i.log.zip
+      max-file-size: 5MB
