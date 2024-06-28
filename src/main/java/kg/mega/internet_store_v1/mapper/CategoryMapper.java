@@ -17,7 +17,7 @@ public interface CategoryMapper {
 
     @Mappings({
             @Mapping(source = "name", target = "categoryName"),
-            @Mapping(source = "active", target = "exists")})
+            @Mapping(source = "isActive", target = "exists")})
     CategoryDto toCategoryDto(Category category);
 
     List<Category> toCategoryList(List<CategoryDto> categoryDtoList);

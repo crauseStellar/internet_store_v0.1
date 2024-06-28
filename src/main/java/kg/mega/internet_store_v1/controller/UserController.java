@@ -47,25 +47,36 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @Operation(description = "Получить всех пользователей", summary = "Создать всех ползователя")
+    @Operation(description = "Получение списка пользователей", summary = "Получить пользователей")
     @ApiResponses( {
-            @ApiResponse(responseCode = "200", description = "Пользователи успешно созданы")
+            @ApiResponse(responseCode = "200", description = "Пользователи успешно получены")
     })
     @GetMapping("/getAll")
     public List<User> getAll() {
         return userService.findAll();
     }
 
+    @Operation(description = "Обновление данные пользователя", summary = "Обновить данные пользователя")
+    @ApiResponses( {
+            @ApiResponse(responseCode = "200", description = "Данные пользователя успешно обновлены!")
+    })
     @PutMapping("/update")
     public User updateUser(@RequestBody User user) {
         return userService.update(user);
     }
 
+    @Operation(description = "Удаление пользователя", summary = "удалить пользователя")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Пользователь успешно удален!")
+    })
     @DeleteMapping("/delete")
     public String deleteUser(@RequestBody User user) {
+        return userService.delete(user);}
 
-        return userService.delete(user);
-    }
+    @Operation(description = "Добавление аватарки пользователя", summary = "Добавить аватар пользователю")
+    @ApiResponses( {
+            @ApiResponse(responseCode = "200", description = "Аватарка успешно добавлена!")
+    })
     @PostMapping("/add_avatar")
     public void addImage(@RequestParam("file") MultipartFile file, @RequestParam Long id){
         storageService.addUserAvatar(file,id);

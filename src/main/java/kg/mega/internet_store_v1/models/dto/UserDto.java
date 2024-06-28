@@ -21,7 +21,5 @@ public class UserDto {
         this.email = user.getEmail();
     }
 
-    public UserDto() {
-
-    }
+    public UserDto() {}
 }

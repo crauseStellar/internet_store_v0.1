@@ -3,6 +3,7 @@ package kg.mega.internet_store_v1.service.impl;
 import kg.mega.internet_store_v1.mapper.UserMapper;
 import kg.mega.internet_store_v1.models.Basket;
 import kg.mega.internet_store_v1.models.User;
+import kg.mega.internet_store_v1.models.dto.ActivateUserDto;
 import kg.mega.internet_store_v1.models.dto.ResponseDto;
 import kg.mega.internet_store_v1.models.dto.UserDto;
 import kg.mega.internet_store_v1.repository.UserRepo;
@@ -10,6 +11,8 @@ import kg.mega.internet_store_v1.service.BasketService;
 import kg.mega.internet_store_v1.service.RoleService;
 import kg.mega.internet_store_v1.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +25,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final BasketService basketService;
@@ -81,6 +85,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByUsername(String username) {
         return userRepo.findByUsername(username);
+    }
+
+    @Override
+    public ResponseEntity<?> activateUser(ActivateUserDto activateUserDto) {
+        Optional <User> optionalUser = findByEmail(activateUserDto.getEmail());
+        if (optionalUser.isEmpty()){
+            log.error("There is no optionalUser with email " + activateUserDto.getEmail());
+            return ResponseEntity.status(487).body("There is no optionalUser with email " + activateUserDto.getEmail());
+        }
+        User user = optionalUser.get();
+        if (user.getIsActive() ){
+            return ResponseEntity.status(486).body("User is already activated");
+        }
+        log.info("Activating user by email: " + activateUserDto.getEmail());
+        if (user.getActivationCode().equals(activateUserDto.getActivationCode())){
+            user.setIsActive(true);
+            userRepo.save(user);
+            log.info("User activated");
+            return ResponseEntity.ok("User activated successfully!");
+        }
+        log.error("ActivationCode is incorrect!");
+        return ResponseEntity.status(488).body("ActivationCode is incorrect!");
+
     }
 
     private void test(ResponseDto responseDto) {

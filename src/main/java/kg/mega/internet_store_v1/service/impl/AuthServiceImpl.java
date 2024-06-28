@@ -7,6 +7,7 @@ import kg.mega.internet_store_v1.models.dto.AuthResponseDto;
 import kg.mega.internet_store_v1.models.dto.RegistrationRequestDto;
 import kg.mega.internet_store_v1.repository.BasketRepo;
 import kg.mega.internet_store_v1.service.AuthService;
+import kg.mega.internet_store_v1.service.MailService;
 import kg.mega.internet_store_v1.service.UserService;
 import kg.mega.internet_store_v1.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final BasketRepo basketRepo;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @Override
     public AuthResponseDto authenticate(AuthRequestDto authRequestDto) {
@@ -47,7 +49,15 @@ public class AuthServiceImpl implements AuthService {
             System.out.println(String.format("Ползователя с логином '%s' уже существует!",registrationRequestDto.getUsername()));
             return null;
         }
-        User user = userService.saveUser(new User(registrationRequestDto));
-        return authenticate(new AuthRequestDto(user));
+        User user = new User(registrationRequestDto);
+        user.setActivationCode((generateRandomActivationCode()));
+        userService.saveUser(user);
+        mailService.sendSimpleMessage( user.getEmail(), "Код аквифации аккаунта", "Ваш код активации аккаунта " + user.getActivationCode());
+
+        return authenticate(new AuthRequestDto(new User(registrationRequestDto)));
+    }
+
+    private Integer generateRandomActivationCode(){
+        return (int) (Math.random() * 10000);
     }
 }
